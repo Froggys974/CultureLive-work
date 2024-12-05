@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CustomerModule } from './customer/customer.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getTypeOrmConfig } from './config/typeorm.config';
+import { RentalModule } from './rentals/rental.module';
 
 @Module({
   imports: [ConfigModule.forRoot(), CustomerModule,
@@ -13,6 +14,7 @@ import { getTypeOrmConfig } from './config/typeorm.config';
       inject: [ConfigService],
       useFactory: getTypeOrmConfig,
     }),
+    RentalModule,
   ],
   controllers: [AppController],
   providers: [AppService],

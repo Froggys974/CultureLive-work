@@ -1,5 +1,5 @@
+import { Rental } from 'src/rentals/rental.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-// import { Rental } from './rental.entity'; // Entité Location, si besoin
 
 @Entity()
 export class Customer {
@@ -30,6 +30,6 @@ export class Customer {
   @Column({ type: 'timestamp', nullable: true, default: () => 'CURRENT_TIMESTAMP' })
   last_update: string;
 
-//   @OneToMany(() => Rental, rental => rental.customer)
-//   rentals: Rental[]; // Si tu as des locations pour chaque client
+  @OneToMany(() => Rental, rental => rental.customer)
+  rentals: Rental[];
 }
