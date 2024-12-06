@@ -1,0 +1,5 @@
+export enum TaskType {
+    EMAIL_REMINDER_J5 = 'EMAIL_REMINDER_J5',
+    EMAIL_REMINDER_J3 = 'EMAIL_REMINDER_J3',
+  }
+  
