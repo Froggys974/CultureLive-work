@@ -1,79 +1,128 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Rental Culture Live
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Welcome to the Rental Culture Live application! This guide will help you set up and run the application using Docker Compose or npm.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Prerequisites
 
-## Description
+Before you begin, ensure you have the following installed on your machine:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Node.js](https://nodejs.org/en/download/) (if you plan to run the app without Docker)
+- [PostgreSQL](https://www.postgresql.org/download/) (if you plan to run the app without Docker)
 
-## Project setup
+## Getting Started
 
-```bash
-$ npm install
-```
+### Running with Docker Compose
 
-## Compile and run the project
+1.  **Clone the repository**:
 
-```bash
-# development
-$ npm run start
+    ```bash
+    git clone https://github.com/Froggys974/CultureLive-work.git
+    cd CultureLive-work
+    ```
 
-# watch mode
-$ npm run start:dev
+2.  **Create and configure environment variables**:
 
-# production mode
-$ npm run start:prod
-```
+        Create a `.env` file in the root directory and add the following variables (look in .env.example):
 
-## Run tests
+    ```env
 
-```bash
-# unit tests
-$ npm run test
+    NODE_ENV=dev
+    DB_USER=your_db_user
+    DB_PASSWORD=your_db_password
+    DB_NAME=your_db_name
+    DB_HOST=your_db_host
+    DB_PORT=your_db_port
+    ```
 
-# e2e tests
-$ npm run test:e2e
+3.  **Build and start the Docker containers**:
 
-# test coverage
-$ npm run test:cov
-```
+    ```bash
+    docker-compose up -d
+    ```
 
-## Deployment
+    This will start the application, PostgreSQL, and Adminer. The PostgreSQL container will initialize the database and insert data from the provided SQL files.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+4.  **Wait for the data insertion to complete**:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+    The data insertion process might take a few minutes. You can check the logs to see when it's done:
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+    ```bash
+    docker-compose logs -f database
+    ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+5.  **Restart the Docker containers**:
 
-## Resources
+    Once the data insertion is complete, restart the Docker containers to ensure everything is set up correctly:
 
-Check out a few resources that may come in handy when working with NestJS:
+    ```bash
+    docker-compose down
+    docker-compose up -d
+    ```
+
+6.  **Access the application**:
+
+    - **Application**: [http://localhost:3000](http://localhost:3000)
+    - **Adminer**: 808[http://localhost:0](http://localhost:8080)
+
+    Use the following credentials to log in to Adminer:
+
+    - **System**: PostgreSQL
+    - **Server**: `postgres_db`
+    - **Username**: `YourUserName`
+    - **Password**: `YourPassWord`
+    - **Database**: `rentalCultureLive`
+
+### Running with npm
+
+1. **Clone the repository**:
+
+   ```bash
+    git clone https://github.com/Froggys974/CultureLive-work.git
+    cd CultureLive-work
+   ```
+
+2. **Install dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+3. **Create and configure environment variables**:
+
+   Create a `.env` file in the root directory and add the following variables (look in .env.example):
+
+    ```env
+
+    NODE_ENV=dev
+    DB_USER=your_db_user
+    DB_PASSWORD=your_db_password
+    DB_NAME=your_db_name
+    DB_HOST=your_db_host
+    DB_PORT=your_db_port
+   ```
+
+4. **Ensure PostgreSQL is running**:
+
+   Make sure PostgreSQL is installed and running on your machine. Create the database if it doesn't exist and add data:
+
+   ```bash
+   psql -U postgres -c "CREATE DATABASE rentalCultureLive;"
+   psql -U postgres -d rentalCultureLive -f dbDataFile/postgres-sakila-schema.sql
+   ```
+
+5. **Run the application**:
+
+   ```bash
+   npm run start:dev
+   ```
+
+6. **Access the application**:
+
+   - **Application**: [http://localhost:3000](http://localhost:3000)
+
+## Additional Resources
 
 - Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
 - For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
@@ -81,19 +130,7 @@ Check out a few resources that may come in handy when working with NestJS:
 - Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
 - Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
 - Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Thank you for using Rental Culture Live! We hope this guide helps you get started quickly. If you have any questions or run into any issues, feel free to reach out to our support channels.
