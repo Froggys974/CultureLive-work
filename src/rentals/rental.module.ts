@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { RentalController } from './rental.controller';
 import { RentalService } from './rental.service';
-import { Rental } from './rental.entity';
+import { Rental } from '../entities/rental.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({

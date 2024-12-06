@@ -1,4 +1,4 @@
-import { Rental } from 'src/rentals/rental.entity';
+import { Rental } from 'src/entities/rental.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
@@ -22,7 +22,7 @@ export class Customer {
   store_id: number;
 
   @Column({ default: true })
-  active: boolean;
+  activebool: boolean;
 
   @Column({ type: 'date', default: () => 'CURRENT_DATE' })
   create_date: string;
