@@ -1,13 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Rental } from './rental.entity';
+import { ScheduledTaskService } from 'src/scheduled_task/scheduled_task.service';
+import { Rental } from 'src/entities/rental.entity';
+import { Customer } from 'src/entities/customer.entity';
 
 @Injectable()
 export class RentalService {
   constructor(
     @InjectRepository(Rental)
     private readonly rentalRepository: Repository<Rental>,
+    private readonly scheduledTaskService: ScheduledTaskService
   ) {}
 
   async findAllRentals(): Promise<Rental[]> {
@@ -24,7 +27,9 @@ export class RentalService {
 
   async createRental(data: Partial<Rental>): Promise<Rental> {
     const rental = this.rentalRepository.create(data);
-    return await this.rentalRepository.save(rental);
+    const savedRental = await this.rentalRepository.save(rental);
+    await this.scheduledTaskService.createScheduledTasksForRental(savedRental);
+    return savedRental;
   }
 
   async updateRental(id: number, data: Partial<Rental>): Promise<Rental> {
@@ -38,18 +43,18 @@ export class RentalService {
     await this.rentalRepository.remove(rental);
   }
 
-  async findAllRentalsByCustomerId(customerId: number): Promise<Rental[]> {
+  async findAllRentalsByCustomerId(customer: Customer): Promise<Rental[]> {
     return await this.rentalRepository.find({
-      where: { customer_id: customerId },
+      where: { customer: customer },
     });
   }
 
-  async findOneRentalByCustomerId(customerId: number, id: number): Promise<Rental> {
+  async findOneRentalByCustomerId(customer: Customer, id: number): Promise<Rental> {
     const rental = await this.rentalRepository.findOne({
-      where: { customer_id: customerId, rental_id: id },
+      where: { customer: { customer_id: customer.customer_id }, rental_id: id },
     });
     if (!rental) {
-      throw new NotFoundException(`Rental with ID ${id} not found for customer: ${customerId}.`);
+      throw new NotFoundException(`Rental with ID ${id} not found for customer: ${customer.customer_id}`);
     }
     return rental; 
   }
