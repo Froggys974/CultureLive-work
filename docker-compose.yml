@@ -11,9 +11,9 @@ services:
       - /usr/src/app/node_modules
     environment:
       - NODE_ENV=development
-      - DATABASE_HOST=database
+      - DATABASE_HOST=${DATABASE_HOST}
       - DATABASE_PORT=5432
-      - DATABASE_USERNAME=${DB_USER}
+      - DATABASE_USERNAME=${DB_USERNAME}
       - DATABASE_PASSWORD=${DB_PASSWORD}
       - DATABASE_NAME=${DB_NAME}
     depends_on:
@@ -23,13 +23,16 @@ services:
     image: postgres:15
     container_name: postgres_db
     environment:
-      POSTGRES_USER: ${DB_USER}
+      POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - .:/sql
+      - database:/var/lib/postgresql/data
+      - ./dbDataFile/postgres-sakila-schema.sql:/docker-entrypoint-initdb.d/init.sql
+
 
   adminer:
     image: adminer:4.8.1
@@ -41,4 +44,4 @@ services:
       ADMINER_DEFAULT_SERVER: database
 
 volumes:
-  postgres-data:
+  database:

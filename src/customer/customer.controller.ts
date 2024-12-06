@@ -57,6 +57,9 @@ export class CustomerController {
     @Param('id') customerId: number,
     @Body() body: CreateRentalDto,
   ) {
+    if (customerId !== body.customer_id) {
+      throw new NotFoundException(`customer_id in body must match URL`);   
+    }
     const customer = await this.customerService.findOne(customerId);
     if (!customer) {
         throw new NotFoundException(
